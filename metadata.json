@@ -1,9 +1,9 @@
 {
-  "name": "memcapture",
+  "name": "juju4-memcapture",
   "version": "0.5.0",
   "author": "juju4",
   "summary": "Do a memory capture of a system",
-  "license": "BSD",
+  "license": "BSD-2-Clause",
   "source": "git://github.com/juju4/puppet-memcapture.git",
   "project_page": "https://github.com/juju4/puppet-memcapture",
   "dependencies": [
