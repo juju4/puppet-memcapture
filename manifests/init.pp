@@ -3,18 +3,8 @@ class memcapture (
   $dst_path = '/tmp/cases',
   $bin_path = '/tmp/ir-bin',
   Boolean $download = true,
-  Boolean $build = true,
-  Boolean $install = true,
   Boolean $capture = true,
-  # if using fmem, this is required! or extract for /proc/meminfo? (dd count format)
-  # 512MB = 536870912 = 0x1fffffff
-  # 4GB = 4294967296 = 0x100000000
-  $memory_size = '512',
-  $memory_bs = '1M',
-  $fmem_v = '1.6-1',
   Boolean $use_linpmem = true,
-  Boolean $use_fmem = true,
-  Boolean $use_lmg = true,
   $winpmem_v = '2.1.post4',
   $winpmem_url = 'https://github.com/google/rekall/releases/download/v1.5.1/winpmem-2.1.post4.exe',
   $winpmem_ext = 'img',
