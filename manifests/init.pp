@@ -1,7 +1,7 @@
 #init.pp
 class memcapture (
   $dst_path = '/tmp/cases',
-  $bin_path = "/tmp/ir-bin",
+  $bin_path = '/tmp/ir-bin',
   Boolean $download = true,
   Boolean $build = true,
   Boolean $install = true,
@@ -30,14 +30,14 @@ class memcapture (
   #$osxpmem_ext = 'map',    # = aff4
   ) {
 
-  if $facts[osfamily] == 'windows' { 
-    notice("Running memcapture on Windows")
+  if $facts[osfamily] == 'windows' {
+    notice('Running memcapture on Windows')
     include ::memcapture::winpmem
-  } elsif $facts[osfamily] == 'Darwin' { 
-    notice("Running memcapture on Macos")
+  } elsif $facts[osfamily] == 'Darwin' {
+    notice('Running memcapture on Macos')
     include ::memcapture::osxpmem
   } else {
-    notice("Running memcapture on Linux")
+    notice('Running memcapture on Linux')
     include ::wget
     include ::memcapture::linpmem
   }
