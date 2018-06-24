@@ -9,35 +9,39 @@ init:
 - 'mkdir C:\ProgramData\PuppetLabs\facter && exit 0'
 - 'mkdir C:\ProgramData\PuppetLabs\hiera && exit 0'
 - 'mkdir C:\ProgramData\PuppetLabs\puppet\var && exit 0'
-environment:
-  matrix:
-  - PUPPET_GEM_VERSION: ~> 4.0
-    RUBY_VER: 23
-  - PUPPET_GEM_VERSION: ~> 4.0
-    RUBY_VER: 23-x64
-# https://github.com/ffi/ffi/issues/602#issuecomment-363364015  Ruby Gems Version is limited to < 2.5 on windows.
-  - PUPPET_GEM_VERSION: ~> 5.0
-    RUBY_VER: 24
-  - PUPPET_GEM_VERSION: ~> 5.0
-    RUBY_VER: 24-x64
-  - PUPPET_GEM_VERSION: 4.7.1
-    RUBY_VER: 23-x64
+#- ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 matrix:
   fast_finish: true
+
 install:
-- SET PATH=C:\Ruby%RUBY_VER%\bin;%PATH%
+- SET PATH=C:\Program Files\Puppet Labs\Puppet\bin;C:\Ruby%RUBY_VER%\bin;%PATH%
 - ps: |
-    gem list openssl
-    ruby -ropenssl -e 'puts \"OpenSSL Version - #{OpenSSL::OPENSSL_VERSION}\"; puts \"OpenSSL Library Version - #{OpenSSL::OPENSSL_LIBRARY_VERSION}\"'
-- bundle install --jobs 4 --retry 2 --without system_tests build
-- type Gemfile.lock
+    dism /online /get-features
+    dism /online /Enable-Feature /FeatureName:ManagementOdata
+    $msiPath = "$($env:USERPROFILE)\puppet-agent-5.4.0-x64.msi"
+    (New-Object Net.WebClient).DownloadFile('https://downloads.puppetlabs.com/windows/puppet5/puppet-agent-5.4.0-x64.msi', $msiPath)
+    cmd /c start /wait msiexec /i $msiPath /q /L* c:\install-puppet.log
+- ps: |
+    puppet config print config
+    puppet config print modulepath
+    puppet module install puppetlabs-stdlib
+    puppet module install puppetlabs-powershell
+    puppet module install maestrodev/wget
+- copy /y hiera.yaml C:\ProgramData\PuppetLabs\puppet\etc\hiera.yaml
+
 build: off
+
 test_script:
-- bundle exec puppet -V
-- ruby -v
-- gem -v
-- bundle -v
-- bundle exec rake spec
+- ps: |
+    puppet apply manifests/init.pp --disable_warnings deprecations --verbose
+
+on_finish:
+- ps: Get-ChildItem -Path "C:\Windows\temp"
+
+on_failure:
+- cmd: puppet module list --tree
+- ps: $PSVersionTable.PSVersion
+
 notifications:
 - provider: Email
   to:
