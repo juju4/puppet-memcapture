@@ -2,6 +2,8 @@
 class memcapture (
   $dst_path = '/tmp/cases',
   $bin_path = '/tmp/ir-bin',
+  $win_bin_path = 'c:\Windows\temp',
+  $win_dst_mount = 'c:\Windows\temp',
   Boolean $download = true,
   Boolean $capture = true,
   Boolean $use_linpmem = true,

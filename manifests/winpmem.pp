@@ -1,8 +1,8 @@
 # Memory capture
 class memcapture::winpmem {
 
-  $winpmem_bin = "${memcapture::bin_path}/winpmem-2.1.post4.exe"
-  $winpmem_capture = "${memcapture::dst_mount}/${::hostname}-memory-winpmem.${memcapture::winpmem_ext}"
+  $winpmem_bin = "${memcapture::win_bin_path}/winpmem-2.1.post4.exe"
+  $winpmem_capture = "${memcapture::win_dst_mount}/${::hostname}-memory-winpmem.${memcapture::winpmem_ext}"
 
   file { 'winpmem':
     ensure => 'file',
