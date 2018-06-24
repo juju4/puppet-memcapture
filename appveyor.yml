@@ -31,7 +31,7 @@ build: off
 
 test_script:
 - ps: |
-    puppet apply manifests/init.pp --disable_warnings deprecations --verbose
+    puppet apply manifests/site.pp --disable_warnings deprecations --verbose
 
 on_finish:
 - ps: Get-ChildItem -Path "C:\Windows\temp"
